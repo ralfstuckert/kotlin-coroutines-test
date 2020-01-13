@@ -16,7 +16,7 @@ suspend fun confirmDone(ui: UI): Confirmation =
         ui.waitForUserConfirm("I'm done")
     }
 
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class MainDispatcher {
 
     @MockK
