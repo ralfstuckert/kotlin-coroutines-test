@@ -1,6 +1,6 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Test
+import kotlin.test.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class RunBlockingScenarios {

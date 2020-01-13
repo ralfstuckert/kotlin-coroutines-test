@@ -1,6 +1,6 @@
 import kotlinx.coroutines.*
-import org.junit.Test
 import org.slf4j.LoggerFactory
+import kotlin.test.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class NewCoroutineContext {

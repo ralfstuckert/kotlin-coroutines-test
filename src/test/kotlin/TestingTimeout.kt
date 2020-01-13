@@ -3,8 +3,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertSame
-import org.junit.Test
+import kotlin.test.*
 
 suspend fun loadUser(backend: UserService): User =
     withTimeout(30_000) {

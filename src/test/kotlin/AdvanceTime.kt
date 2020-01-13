@@ -2,8 +2,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
-import org.junit.Test
+import kotlin.test.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class AdvanceTime {
@@ -15,7 +14,7 @@ class AdvanceTime {
             delay(1000)
             called = true
         }
-        Assert.assertFalse(called)
+        assertFalse(called)
     }
 
     @Test
@@ -26,7 +25,7 @@ class AdvanceTime {
             called = true
         }
         advanceTimeBy(1000)
-        Assert.assertTrue(called)
+        assertTrue(called)
     }
 
     @Test
@@ -37,9 +36,9 @@ class AdvanceTime {
             called = true
         }
         advanceTimeBy(999)
-        Assert.assertFalse(called)
+        assertFalse(called)
         advanceTimeBy(1)
-        Assert.assertTrue(called)
+        assertTrue(called)
     }
 
     @Test
@@ -54,12 +53,12 @@ class AdvanceTime {
             delay(2000)
             called2 = true
         }
-        Assert.assertFalse(called1)
-        Assert.assertFalse(called2)
+        assertFalse(called1)
+        assertFalse(called2)
 
         advanceUntilIdle()
-        Assert.assertTrue(called1)
-        Assert.assertTrue(called2)
+        assertTrue(called1)
+        assertTrue(called2)
     }
 
 

@@ -2,15 +2,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 
-    @Before
+    @BeforeTest
     fun setup() {
         MockKAnnotations.init(this)
     }

@@ -1,8 +1,6 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class EagerExecution {
