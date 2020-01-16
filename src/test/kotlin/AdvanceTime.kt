@@ -1,20 +1,24 @@
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class AdvanceTime {
 
     @Test
-    fun eagerUntilDelayOrYield() = runBlockingTest {
+    fun eagerExecutionUntilDelayOrYield() = runBlockingTest {
         var called = false
         launch {
-            delay(1000)
+            yield()
             called = true
         }
+        // eager execution ends at yield...
         assertFalse(called)
+        // ...so continue manually
+        runCurrent()
+        assertTrue(called)
     }
 
     @Test
@@ -24,6 +28,9 @@ class AdvanceTime {
             delay(1000)
             called = true
         }
+        // eager execution stops due to delay...
+        assertFalse(called)
+        // ...so advance virtual time
         advanceTimeBy(1000)
         assertTrue(called)
     }
@@ -35,6 +42,7 @@ class AdvanceTime {
             delay(1000)
             called = true
         }
+        // control of virtual time is reliable
         advanceTimeBy(999)
         assertFalse(called)
         advanceTimeBy(1)
@@ -56,9 +64,24 @@ class AdvanceTime {
         assertFalse(called1)
         assertFalse(called2)
 
+        // try to advance all coroutines
         advanceUntilIdle()
         assertTrue(called1)
         assertTrue(called2)
+    }
+
+    @Test
+    fun runBlockingWaits() = runBlocking {
+        val job = launch {
+            delay(5_000)
+        }
+    }
+
+    @Test
+    fun runBlockingTestAdvanvesUnitlIdleOnFinish() = runBlockingTest {
+        launch {
+            delay(5_000_000)
+        }
     }
 
 

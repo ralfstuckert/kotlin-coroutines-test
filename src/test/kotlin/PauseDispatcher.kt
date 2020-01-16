@@ -1,3 +1,5 @@
+import api.UserRepo
+import api.UserService
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
@@ -13,10 +15,10 @@ class PauseDispatcher {
     }
 
     @MockK(relaxUnitFun=true)
-    lateinit var userServiceMock:UserService
+    lateinit var userServiceMock: UserService
 
     @MockK(relaxUnitFun=true)
-    lateinit var userRepoMock:UserRepo
+    lateinit var userRepoMock: UserRepo
 
     @Test
     fun runCurrentAdvancesUntilCurrentTime() = runBlockingTest {

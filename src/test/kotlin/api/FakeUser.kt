@@ -1,8 +1,13 @@
+package api
+
+import api.User
+import api.UserService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
+import org.slf4j.LoggerFactory
 
 
-class FakeUserService(val user:User) : UserService {
+class FakeUserService(val user: User) : UserService {
 
     val deferredUser = CompletableDeferred<User>()
 
@@ -15,7 +20,8 @@ class FakeUserService(val user:User) : UserService {
 
 }
 
-class FakeUserServiceTimeBased(val user:User, val delayMs:Long = 1000):UserService {
+class FakeUserServiceTimeBased(val user: User, val delayMs:Long = 1000):
+    UserService {
 
     override suspend fun load(): User {
         delay(delayMs)
@@ -23,3 +29,6 @@ class FakeUserServiceTimeBased(val user:User, val delayMs:Long = 1000):UserServi
     }
 
 }
+
+val log = LoggerFactory.getLogger("test")
+

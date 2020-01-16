@@ -1,3 +1,5 @@
+import api.User
+import api.UserService
 import com.rickbusarow.dispatcherprovider.DispatcherProvider
 import com.rickbusarow.dispatcherprovider.dispatcherProvider
 import com.rickbusarow.dispatcherprovider.test.TestDispatcherProvider
@@ -7,11 +9,8 @@ import coroutines.testDispatcher
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
 import kotlin.coroutines.coroutineContext
 import kotlin.test.BeforeTest
 import kotlin.test.Test

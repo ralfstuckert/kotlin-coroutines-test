@@ -1,25 +1,25 @@
+import api.FakeUserService
+import api.FakeUserServiceTimeBased
+import api.User
+import api.UserService
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.*
+import kotlinx.coroutines.withTimeout
+import kotlin.test.Test
+import kotlin.test.assertSame
 
 suspend fun loadUser(backend: UserService): User =
     withTimeout(30_000) {
         backend.load()
     }
 
-fun CoroutineScope.loadUserToRepo(backend: UserService, repo:UserRepo) = launch {
-    val user = withTimeout(30_000) {
-        backend.load()
-    }
-    repo.store(user)
-}
-
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
-class TestingTimeout {
+class TestingTimeoutInSuspendableFunction {
 
     val user = User("Herbert")
 
@@ -45,7 +45,7 @@ class TestingTimeout {
     @Test(expected = TimeoutCancellationException::class)
     fun timeoutWithMockk() = runBlockingTest {
         val backend = mockk<UserService>()
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
@@ -55,7 +55,7 @@ class TestingTimeout {
     @Test
     fun inTimeWithMockk() = runBlockingTest {
         val backend = mockk<UserService>()
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(29_999)
             user
         }
@@ -64,33 +64,6 @@ class TestingTimeout {
     }
 
 
-    @Test
-    fun loadUserToRepo() = runBlockingTest {
-        val backend = mockk<UserService>()
-        val repo = mockk<UserRepo>()
-        coEvery {backend.load() } coAnswers {
-            delay(29_999)
-            user
-        }
-
-        loadUserToRepo(backend, repo)
-        advanceUntilIdle()
-        coVerify { repo.store(user) }
-    }
-
-    @Test
-    fun loadUserToRepoTimeout() = runBlockingTest {
-        val backend = mockk<UserService>()
-        val repo = mockk<UserRepo>()
-        coEvery {backend.load() } coAnswers {
-            delay(30_000)
-            user
-        }
-
-        loadUserToRepo(backend, repo)
-        advanceUntilIdle()
-        coVerify(exactly = 0) { repo.store(user) }
-    }
-
 }
+
 

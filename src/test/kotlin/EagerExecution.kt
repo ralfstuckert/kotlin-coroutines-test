@@ -11,7 +11,20 @@ class EagerExecution {
         val job = launch {
             called = true
         }
+        // job might not be executed yet, so need to join
         job.join()
+        assertTrue(called)
+    }
+
+    @Test
+    fun useScopeToWaitForCoroutine() = runBlocking {
+        var called = false
+        coroutineScope {
+            val job = launch {
+                called = true
+            }
+        }
+        // outer scope waits for coroutine, so this is safe
         assertTrue(called)
     }
 
@@ -21,16 +34,17 @@ class EagerExecution {
         val job = launch(start = CoroutineStart.UNDISPATCHED) {
             called = true
         }
-//        job.join()
+        // undispatched will execute eager, so this is safe
         assertTrue(called)
     }
 
     @Test
-    fun eagerExcecution() = runBlockingTest {
+    fun eagerExcecutionInRunBlockingTest() = runBlockingTest {
         var called = false
         launch {
             called = true
         }
+        // runBlockingTest() uses eager executing dispatcher
         assertTrue(called)
     }
 
@@ -40,6 +54,9 @@ class EagerExecution {
         val job = launch(start = CoroutineStart.LAZY) {
             called = true
         }
+        // does not work with lazy, is this intentional?
         assertFalse(called)
     }
+
+
 }
