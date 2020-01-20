@@ -1,6 +1,6 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlin.test.*
+import org.junit.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class WithoutRunBlocking {
@@ -17,7 +17,7 @@ class WithoutRunBlocking {
         scope.cleanupTestCoroutines()
     }
 
-    fun CoroutineScope.foo(compl:CompletableDeferred<Int>) {
+    fun CoroutineScope.foo(compl: CompletableDeferred<Int>) {
         launch {
             println(1)            // executes eagerly when foo() is called due to TestCoroutineScope
             delay(1_000)          // suspends until time is advanced by at least 1_000
@@ -25,4 +25,6 @@ class WithoutRunBlocking {
             println(2)            // executes after advanceTimeUntilIdle
         }
     }
+
+
 }

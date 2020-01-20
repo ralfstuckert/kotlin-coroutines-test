@@ -7,7 +7,10 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import kotlin.test.*
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 fun CoroutineScope.loadUserAsync(backend: UserService) = async {
     withTimeout(30_000) {
@@ -32,7 +35,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     private val user = User("Herbert")
 
-    @BeforeTest
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
@@ -40,7 +43,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     @Test
     fun asyncInTime() = runBlockingTest {
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(29_999)
             user
         }
@@ -52,7 +55,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     @Test(expected = TimeoutCancellationException::class)
     fun asyncTimeout() = runBlockingTest {
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
@@ -61,7 +64,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     @Test
     fun launchTimeout() = runBlockingTest {
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
@@ -73,7 +76,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     @Test
     fun loadUserToRepo() = runBlockingTest {
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(29_999)
             user
         }
@@ -86,7 +89,7 @@ class TestingTimeoutInSeparateCoroutine {
 
     @Test
     fun loadUserToRepoTimeout() = runBlockingTest {
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }

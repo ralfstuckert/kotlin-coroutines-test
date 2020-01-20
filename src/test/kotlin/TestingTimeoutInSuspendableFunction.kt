@@ -9,8 +9,8 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
-import kotlin.test.Test
-import kotlin.test.assertSame
+import org.junit.Assert.assertSame
+import org.junit.Test
 
 suspend fun loadUser(backend: UserService): User =
     withTimeout(30_000) {

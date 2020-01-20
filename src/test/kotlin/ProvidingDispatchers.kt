@@ -12,9 +12,8 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.coroutines.coroutineContext
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertSame
+import org.junit.Assert.*
+import org.junit.*
 
 suspend fun loadUserProvidedDispatcher(backend: UserService, dispatcherProvider: DispatcherProvider): User =
     withContext(dispatcherProvider.io) {
@@ -43,7 +42,7 @@ class ProvidingDispatchers {
     private val user = User("Herbert")
 
 
-    @BeforeTest
+    @Before
     fun setUp() {
         MockKAnnotations.init(this)
 

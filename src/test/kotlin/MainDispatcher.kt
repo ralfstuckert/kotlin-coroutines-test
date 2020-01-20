@@ -10,7 +10,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import java.lang.IllegalStateException
-import kotlin.test.*
+import org.junit.Assert.*
+import org.junit.*
 
 suspend fun confirmDone(ui: UI): Confirmation =
     withContext(Dispatchers.Main) {
@@ -25,7 +26,7 @@ class MainDispatcher {
 
     private lateinit var dispatcher: TestCoroutineDispatcher
 
-    @BeforeTest
+    @Before
     fun setUp() {
         // init mocks
         MockKAnnotations.init(this)
@@ -35,7 +36,7 @@ class MainDispatcher {
         Dispatchers.setMain(dispatcher)
     }
 
-    @AfterTest
+    @After
     fun tearDown() {
         // reset main dispatcher to the original Main dispatcher
         Dispatchers.resetMain()
