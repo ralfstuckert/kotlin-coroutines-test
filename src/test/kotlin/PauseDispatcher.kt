@@ -1,7 +1,9 @@
 import api.UserRepo
 import api.UserService
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.*
@@ -10,17 +12,13 @@ import org.junit.jupiter.api.Assertions.*
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 
+    val userServiceMock: UserService = mockk()
+    val userRepoMock: UserRepo = mockk()
+
     @BeforeEach
     fun setup() {
-        // TODO
-        MockKAnnotations.init(this)
+        clearAllMocks()
     }
-
-    @MockK
-    lateinit var userServiceMock: UserService
-
-    @MockK
-    lateinit var userRepoMock: UserRepo
 
     @Test
     fun runCurrentAdvancesUntilCurrentTime() = runBlockingTest {

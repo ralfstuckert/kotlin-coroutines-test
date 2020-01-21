@@ -2,14 +2,13 @@ import api.User
 import api.UserRepo
 import api.UserService
 import coroutines.coAssertThrows
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.impl.annotations.MockK
+import io.mockk.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 fun CoroutineScope.loadUserAsync(backend: UserService) = async {
     withTimeout(30_000) {
@@ -27,17 +26,13 @@ fun CoroutineScope.loadUserLaunch(backend: UserService) = launch {
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class TestingTimeoutInSeparateCoroutine {
 
-    @MockK
-    private lateinit var backend: UserService
-    @MockK
-    private lateinit var repo: UserRepo
-
+    private val backend: UserService = mockk()
+    private val repo: UserRepo = mockk()
     private val user = User("Herbert")
 
     @BeforeEach
     fun setUp() {
-        // TODO
-        MockKAnnotations.init(this)
+        clearAllMocks()
     }
 
 

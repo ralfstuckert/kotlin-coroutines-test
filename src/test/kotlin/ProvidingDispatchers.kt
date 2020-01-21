@@ -1,8 +1,6 @@
 import api.User
 import api.UserService
 import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.containsSubstring
-import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.startsWith
 import com.rickbusarow.dispatcherprovider.DispatcherProvider
 import com.rickbusarow.dispatcherprovider.dispatcherProvider
@@ -11,13 +9,19 @@ import com.rickbusarow.dispatcherprovider.test.runBlockingTestProvided
 import com.rickbusarow.dispatcherprovider.withIO
 import coroutines.testDispatcher
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
-import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.*
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withContext
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.coroutines.coroutineContext
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
 
 suspend fun loadUserProvidedDispatcher(backend: UserService, dispatcherProvider: DispatcherProvider): User =
     withContext(dispatcherProvider.io) {
@@ -41,17 +45,15 @@ suspend fun loadUserWithIO(backend: UserService): User =
 @ExperimentalCoroutinesApi
 class ProvidingDispatchers {
 
-    @MockK
-    private lateinit var backend: UserService
+    private val backend: UserService = mockk()
     private val user = User("Herbert")
 
 
     @BeforeEach
     fun setUp() {
-        // TODO
-        MockKAnnotations.init(this)
+        clearAllMocks()
 
-        coEvery {backend.load() } coAnswers {
+        coEvery { backend.load() } coAnswers {
             // delay in order to check auto-advance of TestDispatcher
             delay(30_000)
             user
@@ -80,13 +82,13 @@ class ProvidingDispatchers {
 
     @Test//(expected = IllegalStateException::class)
     fun failsWithDefaultProvider() {
-         val ex = assertThrows<IllegalStateException> {
+        val ex = assertThrows<IllegalStateException> {
 
             runBlockingTest {
                 val loaded = loadUserWithIO(backend)
                 assertSame(user, loaded)
             }
         }
-        assertThat(ex.message?:"", startsWith("This job has not completed yet"))
+        assertThat(ex.message ?: "", startsWith("This job has not completed yet"))
     }
 }
