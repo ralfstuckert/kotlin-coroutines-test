@@ -1,16 +1,15 @@
 import api.User
 import api.UserRepo
 import api.UserService
+import coroutines.coAssertThrows
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
 
 fun CoroutineScope.loadUserAsync(backend: UserService) = async {
     withTimeout(30_000) {
@@ -35,8 +34,9 @@ class TestingTimeoutInSeparateCoroutine {
 
     private val user = User("Herbert")
 
-    @Before
+    @BeforeEach
     fun setUp() {
+        // TODO
         MockKAnnotations.init(this)
     }
 
@@ -53,13 +53,15 @@ class TestingTimeoutInSeparateCoroutine {
     }
 
 
-    @Test(expected = TimeoutCancellationException::class)
+    @Test//(expected = TimeoutCancellationException::class)
     fun asyncTimeout() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
-        loadUserAsync(backend).await()
+        coAssertThrows<TimeoutCancellationException> {
+            loadUserAsync(backend).await()
+        }
     }
 
     @Test

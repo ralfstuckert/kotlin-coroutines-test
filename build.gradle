@@ -29,13 +29,18 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.0.13'
 
 
-    testImplementation "junit:junit:4.12"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutines_version"
     testImplementation "io.mockk:mockk:1.9"
+    testImplementation "com.natpryce:hamkrest:1.7.0.0"
 
     testImplementation "com.rickbusarow.dispatcherprovider:dispatcher-provider:1.0.0-beta02"
     testImplementation "com.rickbusarow.dispatcherprovider:dispatcher-provider-test:1.0.0-beta02"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileTestKotlin {

@@ -1,6 +1,6 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineScope
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class WithoutRunBlocking {

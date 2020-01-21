@@ -1,14 +1,14 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class AdvanceTime {
 
     @Test
-    fun eagerExecutionUntilDelayOrYield() = runBlockingTest {
+    fun `eager execution until delay or yield`() = runBlockingTest {
         var called = false
         launch {
             yield()

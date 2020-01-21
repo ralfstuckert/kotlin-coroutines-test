@@ -4,21 +4,22 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.*
-import org.junit.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 
-    @Before
+    @BeforeEach
     fun setup() {
+        // TODO
         MockKAnnotations.init(this)
     }
 
-    @MockK(relaxUnitFun=true)
+    @MockK
     lateinit var userServiceMock: UserService
 
-    @MockK(relaxUnitFun=true)
+    @MockK
     lateinit var userRepoMock: UserRepo
 
     @Test

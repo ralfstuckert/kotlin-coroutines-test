@@ -2,15 +2,16 @@ import api.FakeUserService
 import api.FakeUserServiceTimeBased
 import api.User
 import api.UserService
+import coroutines.coAssertThrows
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withTimeout
-import org.junit.Assert.assertSame
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.junit.platform.commons.util.BlacklistedExceptions
+import org.opentest4j.AssertionFailedError
 
 suspend fun loadUser(backend: UserService): User =
     withTimeout(30_000) {
@@ -23,16 +24,20 @@ class TestingTimeoutInSuspendableFunction {
 
     val user = User("Herbert")
 
-    @Test(expected = TimeoutCancellationException::class)
+    @Test
     fun timeoutWithFake() = runBlockingTest {
         val backend = FakeUserService(user)
-        loadUser(backend)
+        coAssertThrows<TimeoutCancellationException> {
+            loadUser(backend)
+        }
     }
 
-    @Test(expected = TimeoutCancellationException::class)
+    @Test
     fun timeoutWithTimeBasedFake() = runBlockingTest {
         val backend = FakeUserServiceTimeBased(user, 30_000)
-        loadUser(backend)
+        coAssertThrows<TimeoutCancellationException> {
+            loadUser(backend)
+        }
     }
 
     @Test
@@ -42,16 +47,17 @@ class TestingTimeoutInSuspendableFunction {
         assertSame(user, loaded)
     }
 
-    @Test(expected = TimeoutCancellationException::class)
+    @Test
     fun timeoutWithMockk() = runBlockingTest {
         val backend = mockk<UserService>()
         coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
-        loadUser(backend)
+        coAssertThrows<TimeoutCancellationException> {
+            loadUser(backend)
+        }
     }
-
     @Test
     fun inTimeWithMockk() = runBlockingTest {
         val backend = mockk<UserService>()

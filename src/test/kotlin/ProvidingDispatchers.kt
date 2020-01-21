@@ -1,5 +1,9 @@
 import api.User
 import api.UserService
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.containsSubstring
+import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.startsWith
 import com.rickbusarow.dispatcherprovider.DispatcherProvider
 import com.rickbusarow.dispatcherprovider.dispatcherProvider
 import com.rickbusarow.dispatcherprovider.test.TestDispatcherProvider
@@ -12,8 +16,8 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import kotlin.coroutines.coroutineContext
-import org.junit.Assert.*
-import org.junit.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
 
 suspend fun loadUserProvidedDispatcher(backend: UserService, dispatcherProvider: DispatcherProvider): User =
     withContext(dispatcherProvider.io) {
@@ -42,8 +46,9 @@ class ProvidingDispatchers {
     private val user = User("Herbert")
 
 
-    @Before
+    @BeforeEach
     fun setUp() {
+        // TODO
         MockKAnnotations.init(this)
 
         coEvery {backend.load() } coAnswers {
@@ -73,10 +78,15 @@ class ProvidingDispatchers {
         assertSame(user, loaded)
     }
 
-    @Test(expected = IllegalStateException::class)
-    fun failsWithDefaultProvider() = runBlockingTest {
-        val loaded = loadUserWithIO(backend)
-        assertSame(user, loaded)
-    }
+    @Test//(expected = IllegalStateException::class)
+    fun failsWithDefaultProvider() {
+         val ex = assertThrows<IllegalStateException> {
 
+            runBlockingTest {
+                val loaded = loadUserWithIO(backend)
+                assertSame(user, loaded)
+            }
+        }
+        assertThat(ex.message?:"", startsWith("This job has not completed yet"))
+    }
 }
