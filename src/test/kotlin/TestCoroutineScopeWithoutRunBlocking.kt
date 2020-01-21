@@ -3,7 +3,7 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.jupiter.api.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
-class WithoutRunBlocking {
+class TestCoroutineScopeWithoutRunBlocking {
 
     @Test
     fun testFooWithAutoProgress() {

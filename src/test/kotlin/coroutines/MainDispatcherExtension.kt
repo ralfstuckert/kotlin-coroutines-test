@@ -7,6 +7,11 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.extension.*
 
+/**
+ * Creates a [TestCoroutineDispatcher] for each test method, sets it
+ * as the [Main dispatcher][Dispatchers.setMain] and resets it after the test.
+ * The dispatcher can be resolved as a [parameter][ParameterResolver] in the test.
+ */
 @ExperimentalCoroutinesApi
 class MainDispatcherExtension : ParameterResolver, BeforeEachCallback, AfterEachCallback {
 

@@ -61,7 +61,7 @@ class ProvidingDispatchers {
     }
 
     @Test
-    fun explicitDispatcherProvider() = runBlockingTest {
+    fun `inject or pass DispatcherProvider`() = runBlockingTest {
         val dispatcherProvider = TestDispatcherProvider(testDispatcher)
 
         val loaded = loadUserProvidedDispatcher(backend, dispatcherProvider)
@@ -69,19 +69,19 @@ class ProvidingDispatchers {
     }
 
     @Test
-    fun implicitDispatcherProvider() = runBlockingTestProvided {
+    fun `pass DispatcherProvider via coroutine context`() = runBlockingTestProvided {
         val loaded = loadUserContextIO(backend)
         assertSame(user, loaded)
     }
 
     @Test
-    fun usingWithIO() = runBlockingTestProvided {
+    fun `convenience function withIO()`() = runBlockingTestProvided {
         val loaded = loadUserWithIO(backend)
         assertSame(user, loaded)
     }
 
-    @Test//(expected = IllegalStateException::class)
-    fun failsWithDefaultProvider() {
+    @Test
+    fun `make sure using runBlockingTestProvided()`() {
         val ex = assertThrows<IllegalStateException> {
 
             runBlockingTest {
@@ -89,6 +89,9 @@ class ProvidingDispatchers {
                 assertSame(user, loaded)
             }
         }
+        // test was run using the DefaultDispatcherProvider and therefore
+        // not using TestCoroutineDispatcher, but the real IO dispatcher.
+        // So auto-advance fails...
         assertThat(ex.message ?: "", startsWith("This job has not completed yet"))
     }
 }

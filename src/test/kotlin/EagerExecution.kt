@@ -51,6 +51,20 @@ class EagerExecution {
     }
 
     @Test
+    fun `eager execution until delay or yield`() = runBlockingTest {
+        var called = false
+        launch {
+            yield()
+            called = true
+        }
+        // eager execution ends at yield...
+        assertFalse(called)
+        // ...so continue manually
+        runCurrent()
+        assertTrue(called)
+    }
+
+    @Test
     fun noEagerExcecutionOnLazyStart() = runBlockingTest {
         var called = false
         val job = launch(start = CoroutineStart.LAZY) {

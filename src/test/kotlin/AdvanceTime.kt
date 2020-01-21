@@ -1,4 +1,10 @@
-import kotlinx.coroutines.*
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.greaterThanOrEqualTo
+import coroutines.coAssertRunsIn
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -8,22 +14,22 @@ import org.junit.jupiter.api.Test
 class AdvanceTime {
 
     @Test
-    fun `eager execution until delay or yield`() = runBlockingTest {
-        var called = false
-        launch {
-            yield()
-            called = true
+    fun `runBlockingTest() auto-advances virtual time`() = runBlockingTest {
+        coAssertRunsIn(2_000) {
+
+            val virtualStart = currentTime
+
+            delay(100_000)
+
+            val virtualDuration = currentTime - virtualStart
+            assertThat(virtualDuration, greaterThanOrEqualTo(100_000L))
         }
-        // eager execution ends at yield...
-        assertFalse(called)
-        // ...so continue manually
-        runCurrent()
-        assertTrue(called)
     }
 
+
     @Test
-    fun advanceTime() = runBlockingTest {
-        var called = false
+    fun `does not auto-advance time in launched coroutine`() = runBlockingTest {
+       var called = false
         launch {
             delay(1000)
             called = true
@@ -36,7 +42,7 @@ class AdvanceTime {
     }
 
     @Test
-    fun advanceTimeFineControl() = runBlockingTest {
+    fun `advance time is reliable`() = runBlockingTest {
         var called = false
         launch {
             delay(1000)
@@ -50,7 +56,7 @@ class AdvanceTime {
     }
 
     @Test
-    fun advanceUntilIdle() = runBlockingTest {
+    fun `advanceUntilIdle() tries to run all coroutines until idle`() = runBlockingTest {
         var called1 = false
         var called2 = false
         launch {
@@ -71,14 +77,14 @@ class AdvanceTime {
     }
 
     @Test
-    fun runBlockingWaits() = runBlocking {
+    fun `scope of runBlocking waits for all coroutines`() = runBlocking {
         val job = launch {
             delay(5_000)
         }
     }
 
     @Test
-    fun runBlockingTestAdvanvesUnitlIdleOnFinish() = runBlockingTest {
+    fun `runBlockingTest() calls advances unitl idle on finish`() = runBlockingTest {
         launch {
             delay(5_000_000)
         }

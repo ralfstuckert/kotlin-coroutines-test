@@ -20,31 +20,35 @@ class PauseDispatcher {
         clearAllMocks()
     }
 
+
     @Test
-    fun runCurrentAdvancesUntilCurrentTime() = runBlockingTest {
+    fun `paused dispatcher does not execute eager`() = runBlockingTest {
         var state = 0
 
+        pauseDispatcher()
         launch {
-            yield()
             state = 1
-            yield()
+            delay(1000)
             state = 2
-            yield()
+            delay(1000)
             state = 3
         }
-        // launched eager, but stops at yield
+        // not started yet
         assertEquals(0, state)
 
+        // runCurrent() advances all actions until current (virtual) time.
         runCurrent()
-        // runCurrent() advances all action until current (virtual) time
+        assertEquals(1, state)
+
+        advanceTimeBy(1000)
+        assertEquals(2, state)
+
+        advanceUntilIdle()
         assertEquals(3, state)
     }
 
-
-
-
     @Test
-    fun pauseDispatcher() = runBlockingTest {
+    fun `resumeDispatcher() advances until idle`() = runBlockingTest {
         var state = 0
 
         pauseDispatcher()
@@ -60,40 +64,15 @@ class PauseDispatcher {
 
         runCurrent()
         assertEquals(1, state)
-        advanceTimeBy(1000)
-        assertEquals(2, state)
-        advanceTimeBy(1000)
-        assertEquals(3, state)
-    }
-
-    @Test
-    fun resumeDispatcher() = runBlockingTest {
-        var state = 0
-
-        pauseDispatcher()
-        launch {
-            state = 1
-            delay(1000)
-            state = 2
-            delay(1000)
-            state = 3
-        }
-        // not started yet
-        assertEquals(0, state)
-
-        runCurrent()
-        assertEquals(1, state)
-        advanceTimeBy(1000)
-        assertEquals(2, state)
 
         resumeDispatcher()
-        // immediate dispatch after resumeDispatcher() 
+        // advance until idle after resumeDispatcher()
         assertEquals(3, state)
     }
 
 
     @Test
-    fun pauseDispatcherBlock() = runBlockingTest {
+    fun `pauseDispatcher {} resumes after executing block`() = runBlockingTest {
         var state = 0
 
         pauseDispatcher {
@@ -108,11 +87,9 @@ class PauseDispatcher {
             assertEquals(0, state)
             runCurrent()
             assertEquals(1, state)
-            advanceTimeBy(1000)
-            assertEquals(2, state)
         }
 
-        // immediate dispatch after pauseDispatcher() block
+        // advance until idle after pauseDispatcher() block
         assertEquals(3, state)
     }
 

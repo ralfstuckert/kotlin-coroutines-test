@@ -6,7 +6,7 @@ import org.junit.jupiter.api.assertThrows
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class RunBlockingScenarios {
 
-    @Test//(expected = TimeoutCancellationException::class)
+    @Test
     fun runBlockingWithTimeout() {
         assertThrows<TimeoutCancellationException> {
 
@@ -18,9 +18,10 @@ class RunBlockingScenarios {
         }
     }
 
-    @Test//(expected = TimeoutCancellationException::class)
+    @Test
     fun runBlockingWithTimeoutFast() {
         assertThrows<TimeoutCancellationException> {
+
             runBlockingTest {
                 withTimeout(2000) {
                     delay(3000)
