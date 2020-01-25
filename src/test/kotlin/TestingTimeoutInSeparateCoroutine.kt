@@ -2,13 +2,17 @@ import api.User
 import api.UserRepo
 import api.UserService
 import coroutines.coAssertThrows
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.IOException
 
 fun CoroutineScope.loadUserAsync(backend: UserService) = async {
     withTimeout(30_000) {
@@ -37,19 +41,20 @@ class TestingTimeoutInSeparateCoroutine {
 
 
     @Test
-    fun asyncInTime() = runBlockingTest {
+    fun `testing async in time`() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(29_999)
             user
         }
         val deferred = loadUserAsync(backend)
+        // waiting will advance coroutine
         val loaded = deferred.await()
         assertSame(user, loaded)
     }
 
 
-    @Test//(expected = TimeoutCancellationException::class)
-    fun asyncTimeout() = runBlockingTest {
+    @Test
+    fun `testing async timeout`() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
@@ -60,19 +65,19 @@ class TestingTimeoutInSeparateCoroutine {
     }
 
     @Test
-    fun launchTimeout() = runBlockingTest {
+    fun `testing launch timeout`() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(30_000)
             user
         }
         val job = loadUserLaunch(backend)
-
         job.join()
+        // join() does not throw CancellationException
         assertTrue(job.isCancelled)
     }
 
     @Test
-    fun loadUserToRepo() = runBlockingTest {
+    fun `testing behaviour using mocks`() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(29_999)
             user
@@ -85,7 +90,7 @@ class TestingTimeoutInSeparateCoroutine {
     }
 
     @Test
-    fun loadUserToRepoTimeout() = runBlockingTest {
+    fun `testing behaviour on timeout using mocks`() = runBlockingTest {
         coEvery { backend.load() } coAnswers {
             delay(30_000)
             user

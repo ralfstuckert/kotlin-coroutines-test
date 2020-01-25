@@ -1,4 +1,4 @@
-import api.FakeUserService
+import api.FakeUserServiceCompletableDeferred
 import api.FakeUserServiceTimeBased
 import api.User
 import api.UserService
@@ -9,9 +9,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
-import org.junit.platform.commons.util.BlacklistedExceptions
-import org.opentest4j.AssertionFailedError
 
 suspend fun loadUser(backend: UserService): User =
     withTimeout(30_000) {
@@ -25,15 +22,15 @@ class TestingTimeoutInSuspendableFunction {
     val user = User("Herbert")
 
     @Test
-    fun timeoutWithFake() = runBlockingTest {
-        val backend = FakeUserService(user)
+    fun `testing timeout with a fake service using completable deferred`() = runBlockingTest {
+        val backend = FakeUserServiceCompletableDeferred(user)
         coAssertThrows<TimeoutCancellationException> {
             loadUser(backend)
         }
     }
 
     @Test
-    fun timeoutWithTimeBasedFake() = runBlockingTest {
+    fun `testing timeout with a fake service using delay`() = runBlockingTest {
         val backend = FakeUserServiceTimeBased(user, 30_000)
         coAssertThrows<TimeoutCancellationException> {
             loadUser(backend)
@@ -41,14 +38,14 @@ class TestingTimeoutInSuspendableFunction {
     }
 
     @Test
-    fun inTimeWithFake() = runBlockingTest {
+    fun `testing in time with a fake service using delay`() = runBlockingTest {
         val backend = FakeUserServiceTimeBased(user, 29_999)
         val loaded = loadUser(backend)
         assertSame(user, loaded)
     }
 
     @Test
-    fun timeoutWithMockk() = runBlockingTest {
+    fun `testing timeout with a mockk service`() = runBlockingTest {
         val backend = mockk<UserService>()
         coEvery { backend.load() } coAnswers {
             delay(30_000)
@@ -59,7 +56,7 @@ class TestingTimeoutInSuspendableFunction {
         }
     }
     @Test
-    fun inTimeWithMockk() = runBlockingTest {
+    fun `testing in time with a mockk service`() = runBlockingTest {
         val backend = mockk<UserService>()
         coEvery { backend.load() } coAnswers {
             delay(29_999)

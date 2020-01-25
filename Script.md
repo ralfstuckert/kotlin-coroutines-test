@@ -1,6 +1,9 @@
 - EagerExecution
 - 
 
+- TestingTimeoutInSuspendableFunction
+- TestingTimeoutInSeparateCoroutine
+
 ## runBlockingTest
 - Housekeeping der Jobs -> Exception
 

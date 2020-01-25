@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class TestCoroutineScopeWithoutRunBlocking {
 
+
+
     @Test
     fun testFooWithAutoProgress() {
         val uncompleted = CompletableDeferred<Int>() // this Deferred<Foo> will never complete
