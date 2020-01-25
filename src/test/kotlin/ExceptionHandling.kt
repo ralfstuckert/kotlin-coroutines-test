@@ -1,69 +1,81 @@
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineExceptionHandler
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.io.IOException
 import java.util.concurrent.Executors
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import kotlin.coroutines.ContinuationInterceptor
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
 
     private val customDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
-
-    @Test//(expected = IllegalArgumentException::class)
-    fun runBlockingMayIgnoreExceptions2():Unit = runBlocking {
-        val job1 = launch(customDispatcher) {
-            throw IllegalArgumentException("first")
-        }
-        val job2 = launch(customDispatcher) {
-            throw IllegalArgumentException("second")
-        }
-        val job3 = launch(customDispatcher) {
-            throw IllegalArgumentException("third")
-        }
-    }
-
-    @Test//(expected = IllegalArgumentException::class)
-    fun runBlockingTestGetsThemAll2():Unit = runBlockingTest {
-        val job1 = launch(customDispatcher) {
-            throw IllegalArgumentException("first")
-        }
-
-        assertEquals(listOf(IllegalArgumentException("first")), uncaughtExceptions)
-
-        val job2 = launch(customDispatcher) {
-            throw IllegalArgumentException("second")
-        }
-        val job3 = launch(customDispatcher) {
-            throw IllegalArgumentException("third")
+    @Test
+    fun `ruBlocking() allways throws Exception`() {
+        assertThrows<IOException> {
+            runBlocking() {
+                val handler = CoroutineExceptionHandler { _, exception ->
+                    println("ignoring $exception")
+                }
+                val job = launch(handler) { throw IOException("hihi") }
+            }
         }
     }
 
     @Test
-    fun runBlockingMayIgnoreExceptions():Unit = runBlocking() {
-//        val job = launch {
-            val j2 = launch {
-//                assertTrue("1") { false }
-                throw IllegalArgumentException("hihi")
-            }
-            j2.join()
-            delay(100)
-//            assertTrue("2", false)
-            cancel("I can't stand it anymore")
-//        }.join()
+    fun `exceptions in global scope are not handled by runBlocking()`() = runBlocking() {
+        val job = GlobalScope.launch() { throw IOException("hihi") }
+        job.join()
     }
 
-    @Test//(expected = IllegalArgumentException::class)
-    fun runBlockingTestGetsThemAll():Unit = runBlockingTest {
-        val job = launch() {
-            launch(customDispatcher) {
-//                assertTrue("1", false)
-//                throw IllegalArgumentException("hihi")
+    @Test
+    fun `exceptions in global scope can be handled with a TestCoroutineExceptionHandler`() {
+        assertThrows<IOException> {
+            runBlocking() {
+                val handler = TestCoroutineExceptionHandler()
+                val job = GlobalScope.launch(handler) { throw IOException("hihi") }
+                job.join()
+                // cleanup will trigger rethrowing the caught exception
+                handler.cleanupTestCoroutines()
             }
-            delay(100)
-//            assertTrue("2",false)
-            cancel("I can't stand it anymore")
         }
     }
+
+    @Test
+    fun `exceptions in global scope can be handled using runBlockingTest handler`() {
+        assertThrows<IOException> {
+            runBlockingTest() {
+                val handler = coroutineContext[CoroutineExceptionHandler] as TestCoroutineExceptionHandler
+                val job = GlobalScope.launch(handler) { throw IOException("hihi") }
+                job.join()
+            }
+        }
+    }
+
+    @Test
+    fun `children of supervisor job do not propagate exception`() = runBlocking() {
+        supervisorScope() {
+            val child = launch() {
+                throw IOException()
+            }
+        }
+    }
+
+    @Test
+    fun `handler of runBlockingTest() will propagate exceptions of supervisor job children`() {
+        assertThrows<IOException> {
+            runBlockingTest() {
+                supervisorScope() {
+                    val child = launch() {
+                        throw IOException()
+                    }
+                }
+            }
+        }
+    }
+
 
 }
