@@ -2,11 +2,9 @@ package coroutines
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.lessThan
-import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.fail
 import org.junit.platform.commons.util.BlacklistedExceptions
 import java.time.Instant
-
 
 inline suspend fun <reified T : Throwable> coAssertThrows(noinline block: suspend () -> Unit): T {
     try {
@@ -22,7 +20,7 @@ inline suspend fun <reified T : Throwable> coAssertThrows(noinline block: suspen
     }
 }
 
-inline suspend fun coAssertRunsIn(millis:Long, noinline block: suspend () -> Unit) {
+inline suspend fun coAssertRunsIn(millis: Long, noinline block: suspend () -> Unit) {
     val start = Instant.now().toEpochMilli()
     block()
     val duration = Instant.now().toEpochMilli() - start

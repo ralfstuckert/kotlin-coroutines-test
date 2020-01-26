@@ -29,7 +29,7 @@ class MainDispatcherUsingExtension {
     }
 
     @Test
-    fun `provide test dispatcher via extension`(dispatcher: TestCoroutineDispatcher) = dispatcher.runBlockingTest {
+    fun `provide test dispatcher via JUnit extension (aka Rule)`(dispatcher: TestCoroutineDispatcher) = dispatcher.runBlockingTest {
 
         coEvery { uiMock.waitForUserConfirm(any()) } coAnswers {
             delay(10_000)

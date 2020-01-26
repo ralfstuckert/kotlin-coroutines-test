@@ -11,7 +11,6 @@ import kotlin.coroutines.ContinuationInterceptor
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
 
-    private val customDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     @Test
     fun `ruBlocking() allways throws Exception`() {

@@ -30,14 +30,12 @@ suspend fun confirmDone(ui: UI): Confirmation =
 class MainDispatcher {
 
     private val uiMock: UI = mockk()
-
     private lateinit var dedicatedTestDispatcher: TestCoroutineDispatcher
 
     @BeforeEach
     fun setUp() {
         clearAllMocks()
 
-        // set test dispatcher as main
         dedicatedTestDispatcher = TestCoroutineDispatcher()
     }
 
@@ -142,3 +140,5 @@ class MainDispatcher {
 
 
 }
+
+
