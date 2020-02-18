@@ -20,7 +20,6 @@ import kotlin.time.seconds
 class AdvanceTime {
 
     @Test
-    @Disabled
     fun `using runBlocking() may take some time`() = runBlocking() {
         coAssertExecutionTakesAtLeast(5.seconds) {
             delay(5_000)
@@ -28,7 +27,6 @@ class AdvanceTime {
     }
 
     @Test
-    @Disabled
     fun `runBlockingTest() auto-advances virtual time`() = runBlockingTest {
         coAssertExecutesInLessThan(2.seconds) {
             val virtualStart = currentTime
@@ -42,13 +40,10 @@ class AdvanceTime {
     @Test
     fun `does not auto-advance time in launched coroutine`() = runBlockingTest {
         var called = false
-        log.info("before launch")
         launch {
-            log.info("delay")
             delay(1000)
             called = true
         }
-        log.info("after launch")
         // eager execution stops due to delay...
         assertFalse(called)
         // ...so advance virtual time
@@ -57,7 +52,6 @@ class AdvanceTime {
     }
 
     @Test
-    @Disabled
     fun `advance time is reliable`() = runBlockingTest {
         var called = false
         launch {
@@ -72,7 +66,6 @@ class AdvanceTime {
     }
 
     @Test
-    @Disabled
     fun `advanceUntilIdle() tries to run all coroutines until idle`() = runBlockingTest {
         var called1 = false
         var called2 = false
@@ -94,7 +87,6 @@ class AdvanceTime {
     }
 
     @Test
-    @Disabled
     fun `runBlockingTest() calls advanceUntilIdle() on finish`() = runBlockingTest {
         launch {
             delay(5_000_000)
