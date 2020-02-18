@@ -1,14 +1,20 @@
+import com.natpryce.hamkrest.anyElement
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.isA
+import coroutines.SilentTestCoroutineExceptionHandler
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineExceptionHandler
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import java.io.IOException
-import java.util.concurrent.Executors
-import kotlin.coroutines.ContinuationInterceptor
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class ExceptionHandling {
 
 
@@ -47,9 +53,11 @@ class ExceptionHandling {
     fun `exceptions in global scope can be handled using runBlockingTest handler`() {
         assertThrows<IOException> {
             runBlockingTest() {
-                val handler = coroutineContext[CoroutineExceptionHandler] as TestCoroutineExceptionHandler
+                val handler = coroutineContext[CoroutineExceptionHandler]
+                requireNotNull(handler)
                 val job = GlobalScope.launch(handler) { throw IOException("hihi") }
                 job.join()
+                assertTrue(job.isCompleted)
             }
         }
     }
@@ -64,9 +72,10 @@ class ExceptionHandling {
     }
 
     @Test
-    fun `handler of runBlockingTest() will propagate exceptions of supervisor job children`() {
+    fun `TestCoroutineExceptionHandler will propagate exceptions of supervised children`() {
         assertThrows<IOException> {
             runBlockingTest() {
+                // implicitly use the TestCoroutineExceptionHandler of runBlockingTest()
                 supervisorScope() {
                     val child = launch() {
                         throw IOException()
@@ -76,5 +85,21 @@ class ExceptionHandling {
         }
     }
 
+    @Test
+    fun `use a custom exception handler in runBlockingTest() for testing supervisor behaviour`() = runBlockingTest(SilentTestCoroutineExceptionHandler()) {
+        supervisorScope() {
+            val child = launch() {
+                throw IOException()
+            }
+        }
+        // custom exception handler does not propagate (throw) exception as expected
+        // in supervisor scope, but we still can examine it in the test
+        assertThat(uncaughtExceptions, anyElement(isA<IOException>()))
+    }
+
 
 }
+
+
+
+

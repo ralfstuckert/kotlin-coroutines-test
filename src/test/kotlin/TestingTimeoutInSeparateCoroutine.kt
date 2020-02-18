@@ -12,15 +12,14 @@ import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.IOException
 
-fun CoroutineScope.loadUserAsync(backend: UserService) = async {
+fun CoroutineScope.loadUserAsync(backend: UserService):Deferred<User> = async {
     withTimeout(30_000) {
         backend.load()
     }
 }
 
-fun CoroutineScope.loadUserLaunch(backend: UserService) = launch {
+fun CoroutineScope.loadUserLaunch(backend: UserService):Job = launch {
     withTimeout(30_000) {
         backend.load()
     }

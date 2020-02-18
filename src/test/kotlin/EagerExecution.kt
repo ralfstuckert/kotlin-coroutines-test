@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class EagerExecution {
 
     @Test
-    fun noEagerExcecutionInRunBlocking() = runBlocking {
+    fun `no eager excecution in runBlocking`() = runBlocking {
         var called = false
         val job = launch {
             called = true
@@ -19,19 +19,19 @@ class EagerExecution {
     }
 
     @Test
-    fun useScopeToWaitForCoroutine() = runBlocking {
+    fun `use scope to wait for coroutine`() = runBlocking {
         var called = false
         coroutineScope {
             val job = launch {
                 called = true
             }
         }
-        // outer scope waits for coroutine, so this is safe
+        // coroutineScope waits for coroutine, so this is safe
         assertTrue(called)
     }
 
     @Test
-    fun eagerExcecutionInRunBlocking() = runBlocking {
+    fun `eager excecution in runBlocking`() = runBlocking {
         var called = false
         val job = launch(start = CoroutineStart.UNDISPATCHED) {
             called = true
@@ -41,7 +41,7 @@ class EagerExecution {
     }
 
     @Test
-    fun eagerExcecutionInRunBlockingTest() = runBlockingTest {
+    fun `eager excecution in runBlockingTest`() = runBlockingTest {
         var called = false
         launch {
             called = true
@@ -65,7 +65,7 @@ class EagerExecution {
     }
 
     @Test
-    fun noEagerExcecutionOnLazyStart() = runBlockingTest {
+    fun `no eager excecution on lazy start`() = runBlockingTest {
         var called = false
         val job = launch(start = CoroutineStart.LAZY) {
             called = true

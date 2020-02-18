@@ -1,13 +1,14 @@
 import api.UserRepo
 import api.UserService
-import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {

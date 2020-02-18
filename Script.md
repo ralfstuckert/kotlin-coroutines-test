@@ -1,8 +1,18 @@
 - EagerExecution
-- 
-
+  - eager excecution in runBlockingTest
+  - eager execution until delay or yield
+- AdvanceTime
 - TestingTimeoutInSuspendableFunction
 - TestingTimeoutInSeparateCoroutine
+  - async
+- MainDispatcher
+- MainDispatcher using extension
+- Providing Dispatcher
+-------- wenn noch Zeit ist
+- ExceptionHandling
+  - global scope erwähnen
+  - supervisor scope Beispiel
+- PauseDispatcher
 
 ## runBlockingTest
 - Housekeeping der Jobs -> Exception

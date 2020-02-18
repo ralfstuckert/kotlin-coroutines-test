@@ -8,7 +8,6 @@ import com.rickbusarow.dispatcherprovider.test.TestDispatcherProvider
 import com.rickbusarow.dispatcherprovider.test.runBlockingTestProvided
 import com.rickbusarow.dispatcherprovider.withIO
 import coroutines.testDispatcher
-import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk

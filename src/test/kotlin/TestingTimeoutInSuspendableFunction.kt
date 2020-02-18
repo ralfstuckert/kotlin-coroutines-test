@@ -5,8 +5,11 @@ import api.UserService
 import coroutines.coAssertThrows
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 
@@ -55,6 +58,7 @@ class TestingTimeoutInSuspendableFunction {
             loadUser(backend)
         }
     }
+
     @Test
     fun `testing in time with a mockk service`() = runBlockingTest {
         val backend = mockk<UserService>()
