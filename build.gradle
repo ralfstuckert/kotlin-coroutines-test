@@ -25,14 +25,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$coroutines_version"
+    implementation "org.slf4j:slf4j-api:1.7.25"
     implementation 'ch.qos.logback:logback-classic:1.0.13'
     implementation "com.rickbusarow.dispatcherprovider:dispatcher-provider:1.0.0-beta02"
 
-
     testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutines_version"
     testImplementation "io.mockk:mockk:1.9"
     testImplementation "com.natpryce:hamkrest:1.7.0.0"
     testImplementation "com.rickbusarow.dispatcherprovider:dispatcher-provider-test:1.0.0-beta02"
@@ -40,6 +38,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    jvmArgs "-Dkotlinx.coroutines.debug"
 }
 
 compileTestKotlin {
