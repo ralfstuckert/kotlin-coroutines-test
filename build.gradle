@@ -38,7 +38,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    jvmArgs "-Dkotlinx.coroutines.debug"
+
+    // jvmArgs "-Dkotlinx.coroutines.debug"
+    // flag not necessary as assertions are on by default (see Gradle Test enableAssertions)
+    // and therefore is coroutine debugging, see
+    // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-d-e-b-u-g_-p-r-o-p-e-r-t-y_-n-a-m-e.html
 }
 
 tasks.withType(Test) {
