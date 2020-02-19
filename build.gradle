@@ -41,6 +41,10 @@ test {
     jvmArgs "-Dkotlinx.coroutines.debug"
 }
 
+tasks.withType(Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
 compileTestKotlin {
     kotlinOptions {
         freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
