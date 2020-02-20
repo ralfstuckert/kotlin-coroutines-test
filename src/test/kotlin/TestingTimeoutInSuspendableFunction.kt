@@ -22,7 +22,7 @@ suspend fun loadUser(backend: UserService): User =
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class TestingTimeoutInSuspendableFunction {
 
-    val user = User("Herbert")
+    private val user = User("Herbert")
 
     @Test
     fun `testing timeout with a fake service using completable deferred`() = runBlockingTest {

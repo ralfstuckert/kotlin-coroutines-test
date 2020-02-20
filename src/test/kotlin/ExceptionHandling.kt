@@ -2,21 +2,19 @@ import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.isA
 import coroutines.SilentTestCoroutineExceptionHandler
+import coroutines.testExceptionHandler
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineExceptionHandler
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import java.io.IOException
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class ExceptionHandling {
-
 
     @Test
     fun `ruBlocking() allways throws Exception`() {
@@ -38,14 +36,16 @@ class ExceptionHandling {
 
     @Test
     fun `exceptions in global scope can be handled with a TestCoroutineExceptionHandler`() {
-        assertThrows<IOException> {
-            runBlocking() {
-                val handler = TestCoroutineExceptionHandler()
-                val job = GlobalScope.launch(handler) { throw IOException("hihi") }
-                job.join()
+        runBlocking() {
+            val handler = TestCoroutineExceptionHandler()
+            val job = GlobalScope.launch(handler) { throw IOException("hihi") }
+            job.join()
+
+            val ex = assertThrows<IOException> {
                 // cleanup will trigger rethrowing the caught exception
                 handler.cleanupTestCoroutines()
             }
+            assertEquals("hihi", ex.message)
         }
     }
 
@@ -53,9 +53,7 @@ class ExceptionHandling {
     fun `exceptions in global scope can be handled using runBlockingTest handler`() {
         assertThrows<IOException> {
             runBlockingTest() {
-                val handler = coroutineContext[CoroutineExceptionHandler]
-                requireNotNull(handler)
-                val job = GlobalScope.launch(handler) { throw IOException("hihi") }
+                val job = GlobalScope.launch(testExceptionHandler) { throw IOException("hihi") }
                 job.join()
                 assertTrue(job.isCompleted)
             }
@@ -86,16 +84,17 @@ class ExceptionHandling {
     }
 
     @Test
-    fun `use a custom exception handler in runBlockingTest() for testing supervisor behaviour`() = runBlockingTest(SilentTestCoroutineExceptionHandler()) {
-        supervisorScope() {
-            val child = launch() {
-                throw IOException()
+    fun `use a custom exception handler in runBlockingTest() for testing supervisor behaviour`() =
+        runBlockingTest(SilentTestCoroutineExceptionHandler()) {
+            supervisorScope() {
+                val child = launch() {
+                    throw IOException()
+                }
             }
+            // custom exception handler does not propagate (throw) exception as expected
+            // in supervisor scope, but we still can examine it in the test
+            assertThat(uncaughtExceptions, anyElement(isA<IOException>()))
         }
-        // custom exception handler does not propagate (throw) exception as expected
-        // in supervisor scope, but we still can examine it in the test
-        assertThat(uncaughtExceptions, anyElement(isA<IOException>()))
-    }
 
 
 }

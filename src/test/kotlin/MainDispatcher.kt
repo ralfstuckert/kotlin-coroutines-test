@@ -23,7 +23,7 @@ import org.junit.jupiter.api.assertThrows
 
 suspend fun confirmDone(ui: UI): Confirmation =
     withContext(Dispatchers.Main) {
-        ui.waitForUserConfirm("I'm done")
+        ui.waitForUserConfirm("Press OK to continue")
     }
 
 @ExperimentalCoroutinesApi

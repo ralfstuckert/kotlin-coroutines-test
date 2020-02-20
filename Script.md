@@ -1,4 +1,5 @@
 - EagerExecution
+  - no eager excecution in runBlocking
   - eager excecution in runBlockingTest
   - eager execution until delay or yield
 - AdvanceTime

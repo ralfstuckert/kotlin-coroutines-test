@@ -1,3 +1,6 @@
+import api.User
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.startsWith
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
