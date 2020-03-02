@@ -1,4 +1,5 @@
 package api
+
 data class User(val name:String)
 
 interface UserRepo {

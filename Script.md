@@ -16,10 +16,19 @@
 - PauseDispatcher
 
 ## runBlockingTest
+- provides TestCoroutineScope
+- auto advance until idle
 - Housekeeping der Jobs -> Exception
 
 ## TestCoroutineDispatcher
+- eager (immediate) execution
+  - lazy using pauseDispatcher
 - Time control
-- Auto Advance
 
 ## TestCoroutineScope
+- uses TestCoroutineDispatcher and -ExceptionHandler by default
+- delegates delay control and uncaught captor
+
+## TestCoroutineExceptionHandler
+- captures all exceptions
+- rethrows first exception on cleanup

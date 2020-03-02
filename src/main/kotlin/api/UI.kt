@@ -1,4 +1,5 @@
 package api
+
 sealed class Confirmation {
     object OK: Confirmation()
     object Cancel: Confirmation()

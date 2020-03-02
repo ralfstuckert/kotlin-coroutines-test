@@ -6,21 +6,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.yield
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
-
-    val userServiceMock: UserService = mockk()
-    val userRepoMock: UserRepo = mockk()
-
-    @BeforeEach
-    fun setup() {
-        clearAllMocks()
-    }
-
 
     @Test
     fun `paused dispatcher does not execute eager`() = runBlockingTest {
@@ -29,7 +21,7 @@ class PauseDispatcher {
         pauseDispatcher()
         launch {
             state = 1
-            delay(1000)
+            yield()
             state = 2
             delay(1000)
             state = 3
@@ -39,9 +31,6 @@ class PauseDispatcher {
 
         // runCurrent() advances all actions until current (virtual) time.
         runCurrent()
-        assertEquals(1, state)
-
-        advanceTimeBy(1000)
         assertEquals(2, state)
 
         advanceUntilIdle()
@@ -55,16 +44,13 @@ class PauseDispatcher {
         pauseDispatcher()
         launch {
             state = 1
-            delay(1000)
+            yield()
             state = 2
             delay(1000)
             state = 3
         }
         // not started yet
         assertEquals(0, state)
-
-        runCurrent()
-        assertEquals(1, state)
 
         resumeDispatcher()
         // advance until idle after resumeDispatcher()
@@ -79,15 +65,13 @@ class PauseDispatcher {
         pauseDispatcher {
             launch {
                 state = 1
-                delay(1000)
+                yield()
                 state = 2
                 delay(1000)
                 state = 3
             }
 
             assertEquals(0, state)
-            runCurrent()
-            assertEquals(1, state)
         }
 
         // advance until idle after pauseDispatcher() block

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import java.io.IOException
+import java.lang.IllegalArgumentException
 
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
@@ -56,6 +57,27 @@ class ExceptionHandling {
                 val job = GlobalScope.launch(testExceptionHandler) { throw IOException("hihi") }
                 job.join()
                 assertTrue(job.isCompleted)
+            }
+        }
+    }
+
+    @Test
+    fun `TestExceptionHandler used by runBlockingTest() provides access to all caught exceptions`() {
+        assertThrows<IOException> {
+            runBlockingTest() {
+
+                launch() {
+                    throw IOException()
+                }
+                // executed eagerly, so we can handle the exception right here
+                assertEquals(1, uncaughtExceptions.size)
+                assertThat(uncaughtExceptions[0], isA<IOException>())
+
+                launch() {
+                    throw IllegalArgumentException()
+                }
+                assertEquals(2, uncaughtExceptions.size)
+                assertThat(uncaughtExceptions[1], isA<IllegalArgumentException>())
             }
         }
     }
