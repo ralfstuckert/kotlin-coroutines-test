@@ -84,7 +84,14 @@ in the test.
 
 
 # Used Libraries
-TODO 
-https://mockk.io/
-https://github.com/RBusarow/Dispatch
+* For mocking the [MockK](https://mockk.io/) library is used. Besides its
+support for multiplatform development, it does great job dealing with
+coroutines and provides lots of other features. If you do not use it yet, 
+give it a try.
+
+* The [ProvidingDispatchers](#ProvidingDispatchers) example uses this
+[Dispatcher Provider](https://github.com/RBusarow/Dispatch) library. The
+`DispatcherProvider` is passed implicitly in the coroutine context, which lets
+you easily migrate from direct usage of e.g. `Dispatchers.Main` without 
+the need to change any signatures for injection. 
 
