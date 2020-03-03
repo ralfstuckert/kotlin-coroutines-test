@@ -26,6 +26,14 @@ suspend fun confirmDone(ui: UI): Confirmation =
         ui.waitForUserConfirm("Press OK to continue")
     }
 
+/**
+ * UI code like e.g. Android, Swing, JavaFX is executed by a dedicated
+ * UI-Thread. When using coroutines you have to use the [Main dispatcher][Dispatchers.Main]
+ * In order to use the Test-Dispatcher the coroutines test package provides a
+ * special function [Dispatchers.setMain]. The following examples show how you
+ * may use this function with either a dedicated dispatcher or the one provided by
+ * [runBlockingTest].
+ */
 @ExperimentalCoroutinesApi
 class MainDispatcher {
 

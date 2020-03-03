@@ -1,7 +1,13 @@
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Test
 
+/**
+ * Most of the examples so far used [runBlockingTest] in order to
+ * benefit of all test functionality. But you may also use every building
+ * block on its own, like e.g. here the [TestCoroutineScope].
+ */
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class TestCoroutineScopeWithoutRunBlocking {
 

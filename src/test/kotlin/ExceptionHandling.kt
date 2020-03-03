@@ -14,6 +14,11 @@ import org.junit.jupiter.api.assertThrows
 import java.io.IOException
 import java.lang.IllegalArgumentException
 
+/**
+ * Exceptions are not handled by default in a coroutine. [runBlockingTest] provides
+ * a [TestCoroutineExceptionHandler] which allows you to analyze and test exceptional
+ * situations.
+ */
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
 

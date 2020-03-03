@@ -14,6 +14,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Assertions.assertSame
@@ -38,8 +39,13 @@ suspend fun loadUserWithIO(backend: UserService): User =
     }
 
 /**
- * In future releases it might be possible to test code directly using [Dispatchers.IO] etc,
- * see issue [1365](https://github.com/Kotlin/kotlinx.coroutines/issues/1365).
+ * As an alternative to using the [Dispatchers] directly, you may use a dispatcher provider
+ * interface which abstracts the concrete implementation, so you may use a [TestCoroutineDispatcher]
+ * instead of the dedicated ones in tests. The following examples use a
+ * [neat lil library](https://github.com/RBusarow/Dispatch) which implements all this in an easy to use manner.
+ *
+ * > In future releases it might be possible to test code directly using [Dispatchers.IO] etc,
+ * > see issue [1365](https://github.com/Kotlin/kotlinx.coroutines/issues/1365).
  */
 @ExperimentalCoroutinesApi
 class ProvidingDispatchers {

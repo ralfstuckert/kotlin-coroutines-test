@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+/**
+ * [runBlockingTest] actually executes launched coroutines eagerly,
+ * which is effectively like starting it in mode [CoroutineStart.UNDISPATCHED].
+ */
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class EagerExecution {
 

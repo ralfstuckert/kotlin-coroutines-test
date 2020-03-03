@@ -13,6 +13,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
+/**
+ * For an introduction on using the main dispatcher have a look at
+ * [MainDispatcher]. This class here shows usage of a (custom)
+ * JUnit 5 extension providing and maintaining a test main dispatcher for you.
+ */
 @ExtendWith(MainDispatcherExtension::class)
 @ExperimentalCoroutinesApi
 class MainDispatcherUsingExtension {

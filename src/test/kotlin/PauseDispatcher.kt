@@ -1,16 +1,18 @@
-import api.UserRepo
-import api.UserService
-import io.mockk.clearAllMocks
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.DelayController
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.yield
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+/**
+ * The [DelayController] interface implemented by the [TestCoroutineDispatcher]
+ * also provides for pausing and resuming the dispatcher. Effectively this switches
+ * the eager execution into a lazy one under your control.
+ */
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 

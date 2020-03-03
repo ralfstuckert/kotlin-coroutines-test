@@ -8,6 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.Assertions.assertSame
@@ -18,7 +19,10 @@ suspend fun loadUser(backend: UserService): User =
         backend.load()
     }
 
-
+/**
+ * Due to the time control provided by the [TestCoroutineDispatcher]
+ * it is quite easy to test timeouts by checking for [TimeoutCancellationException].
+ */
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class TestingTimeoutInSuspendableFunction {
 
