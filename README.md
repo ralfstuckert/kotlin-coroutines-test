@@ -85,7 +85,7 @@ in the test.
 
 # Used Libraries
 * For mocking the [MockK](https://mockk.io/) library is used. Besides its
-support for multiplatform development, it does great job dealing with
+support for multiplatform development, it does a great job dealing with
 coroutines and provides lots of other features. If you do not use it yet, 
 give it a try.
 
