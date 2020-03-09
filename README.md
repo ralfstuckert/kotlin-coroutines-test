@@ -36,10 +36,10 @@ and rethrows the first one on cleanup.
 
 ### [TestCoroutineScope](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/-test-coroutine-scope/)
 This scope provides a `TestCoroutineDispatcher` and `TestCoroutineExceptionHandler`
-by default if none is already given in the context.  
-It also provides access to the the time controlling functions like 
-`advanceTime...` and the `uncaughtExceptions` by delegating them to the 
-`TestCoroutineDispatcher` resp. `TestCoroutineExceptionHandler`.
+by default if none is already given in the context. It also provides access 
+to the the time controlling functions like `advanceTime...` and the 
+`uncaughtExceptions` by delegating them to the `TestCoroutineDispatcher` 
+resp. `TestCoroutineExceptionHandler`.
 
 ### [runBlockingTest](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/run-blocking-test.html)
 This variant of `runBlocking()` ties everything up and provides you
