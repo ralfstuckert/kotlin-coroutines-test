@@ -5,10 +5,11 @@ module.
 
 ## Building Blocks
 The [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) 
-module consists of four ingredients: The [TestCoroutineDispatcher](#TestCoroutineDispatcher)
-, a [TestCoroutineExceptionHandler](#TestCoroutineExceptionHandler),
-, a [TestCoroutineScope](#TestCoroutineScope) and finally the
-[runBlockingTest](#runBlockingTest) function. Let's get them step by step.
+module consists of four ingredients: The [TestCoroutineDispatcher](#TestCoroutineDispatcher),
+the [TestCoroutineExceptionHandler](#TestCoroutineExceptionHandler), 
+a [TestCoroutineScope](#TestCoroutineScope) and finally the
+[runBlockingTest](#runBlockingTest) function. 
+Let's take them step by step.
 
 ### TestCoroutineDispatcher
 In contrast to other dispatchers, this one executes new coroutines eagerly,
