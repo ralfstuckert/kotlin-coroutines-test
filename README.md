@@ -1,7 +1,51 @@
 # Testing Kotlin Coroutines
 This repository provides examples that let you explore the capabilities
 of the [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) 
-module. The examples are implemented as unit tests, where each test class 
+module. 
+
+## Building Blocks
+The [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) 
+module consists of four ingredients: The [TestCoroutineDispatcher](#TestCoroutineDispatcher)
+, a [TestCoroutineExceptionHandler](#TestCoroutineExceptionHandler),
+, a [TestCoroutineScope](#TestCoroutineScope) and finally the
+[runBlockingTest](#runBlockingTest) function. Let's get them step by step.
+
+### TestCoroutineDispatcher
+In contrast to other dispatchers, this one executes new coroutines eagerly,
+which means they are run immediately like they where started in mode 
+`UNDISPATCHED` (TODO link). This eases the handling in tests a bit. But
+you can change this behaviour, either by providing a dedicated start mode,
+or by pausing the dispatchers (we will come to that later on).
+
+Another important point, is that it is up to a dispatcher to implement
+the concept of time on which scheduling and delay is based on. The 
+`TestCoroutineDispatcher` (TODO link) implements a virtual time and gives
+you fine grained control on it. This allows to write robust time based tests.
+
+### TestCoroutineExceptionHandler
+A `CoroutineContext` may contain a `CoroutineExceptionHandler` which is
+comparable to the uncaught exception handler on threads, and is intended
+to handle all exceptions that arise in a coroutine. This implementations
+captures and collects all exceptions, so they can be inspected in tests,
+and rethrows the first one on cleanup. 
+
+### TestCoroutineScope
+This scope provides a `TestCoroutineDispatcher` and `TestCoroutineExceptionHandler`
+by default if none is already given in the context.  
+It also provides access to the the time controlling functions like 
+`advanceTime...` and the `uncaughtExceptions` by delegating them to the 
+`TestCoroutineDispatcher` resp. `TestCoroutineExceptionHandler`.
+
+### runBlockingTest
+This variant of `runBlocking()` ties everything up and provides you
+a `TestCoroutineScope` and therefore a `TestCoroutineDispatcher` and 
+`TestCoroutineExceptionHandler`. It advances time of the test dispatcher
+unitl idle, which effectively makes sure that everything in the test block
+is run. It also checks for misusage by counting the active jobs before 
+and after the test.
+
+# Examples
+The examples are implemented as unit tests, where each test class 
 demonstrates certain features:
 
 ## [EagerExecution](src/test/kotlin/EagerExecution.kt)
