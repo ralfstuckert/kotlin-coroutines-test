@@ -1,7 +1,8 @@
 # Testing Kotlin Coroutines
-This repository provides examples that let you explore the capabilities
+This repository provides examples for that let you explore the capabilities
 of the [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) 
-module. 
+module. For an introduction to the topic see my 
+[article on medium](https://medium.com/@ralf.stuckert/testing-coroutines-introduction-4ab6733c7599).
 
 ## Building Blocks
 The [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test) 
