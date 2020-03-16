@@ -8,16 +8,15 @@ import kotlinx.coroutines.coroutineScope
 import org.junit.jupiter.api.fail
 import org.junit.platform.commons.util.BlacklistedExceptions
 import org.slf4j.LoggerFactory
-import java.time.Instant
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.MonoClock
+import kotlin.time.TimeSource.Monotonic
 
-@UseExperimental(ExperimentalContracts::class)
-inline suspend fun <reified T : Throwable> coAssertThrows(crossinline block: suspend CoroutineScope.() -> Unit): T {
+@OptIn(ExperimentalContracts::class)
+suspend inline fun <reified T : Throwable> coAssertThrows(crossinline block: suspend CoroutineScope.() -> Unit): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -38,8 +37,11 @@ inline suspend fun <reified T : Throwable> coAssertThrows(crossinline block: sus
     }
 }
 
-@UseExperimental(ExperimentalContracts::class, ExperimentalTime::class)
-inline suspend fun coAssertExecutesInLessThan(expectedDuration: Duration, crossinline block: suspend CoroutineScope.() -> Unit) {
+@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
+suspend inline fun coAssertExecutesInLessThan(
+    expectedDuration: Duration,
+    crossinline block: suspend CoroutineScope.() -> Unit
+) {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -48,21 +50,27 @@ inline suspend fun coAssertExecutesInLessThan(expectedDuration: Duration, crossi
 }
 
 
-@UseExperimental(ExperimentalContracts::class, ExperimentalTime::class)
-inline suspend fun coAssertExecutionTakesAtLeast(expectedDuration: Duration, crossinline block: suspend CoroutineScope.() -> Unit) {
+@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
+suspend inline fun coAssertExecutionTakesAtLeast(
+    expectedDuration: Duration,
+    crossinline block: suspend CoroutineScope.() -> Unit
+) {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
     val duration = coMeasureTime(block)
-    assertThat(duration, greaterThanOrEqualTo(expectedDuration)) { "execution took less than the expected $expectedDuration" }
+    assertThat(
+        duration,
+        greaterThanOrEqualTo(expectedDuration)
+    ) { "execution took less than the expected $expectedDuration" }
 }
 
-@UseExperimental(ExperimentalContracts::class, ExperimentalTime::class)
-inline suspend fun coMeasureTime(crossinline block: suspend CoroutineScope.() -> Unit): Duration {
+@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
+suspend inline fun coMeasureTime(crossinline block: suspend CoroutineScope.() -> Unit): Duration {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
-    val mark = MonoClock.markNow()
+    val mark = Monotonic.markNow()
     coroutineScope {
         block()
     }

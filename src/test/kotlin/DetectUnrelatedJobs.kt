@@ -2,18 +2,15 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.startsWith
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.io.IOException
-import java.lang.IllegalStateException
 
 /**
  * [runBlockingTest] counts active jobs before and after execution of
  * the test block, and raises an exception in case of a mismatch. The
  * problem is usually based in an unintential use of a non-test dispatcher.
  */
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class DetectUnrelatedJobs {
 
     /**

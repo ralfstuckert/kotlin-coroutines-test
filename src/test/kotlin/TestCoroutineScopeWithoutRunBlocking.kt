@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
  * benefit of all test functionality. But you may also use every building
  * block on its own, like e.g. here the [TestCoroutineScope].
  */
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class TestCoroutineScopeWithoutRunBlocking {
 
 

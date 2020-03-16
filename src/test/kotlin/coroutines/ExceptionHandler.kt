@@ -7,7 +7,7 @@ import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.CoroutineContext
 
 
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class SilentTestCoroutineExceptionHandler() : AbstractCoroutineContextElement(CoroutineExceptionHandler),
     CoroutineExceptionHandler, UncaughtExceptionCaptor {
 

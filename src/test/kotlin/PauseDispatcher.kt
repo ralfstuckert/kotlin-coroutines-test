@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
  * also provides for pausing and resuming the dispatcher. Effectively this switches
  * the eager execution into a lazy one under your control.
  */
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 
     @Test

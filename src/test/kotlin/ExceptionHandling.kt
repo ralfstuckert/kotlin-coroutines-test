@@ -9,17 +9,15 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import java.io.IOException
-import java.lang.IllegalArgumentException
 
 /**
  * Exceptions are not handled by default in a coroutine. [runBlockingTest] provides
  * a [TestCoroutineExceptionHandler] which allows you to analyze and test exceptional
  * situations.
  */
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
 
     @Test

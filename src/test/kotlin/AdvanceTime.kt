@@ -2,7 +2,6 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import coroutines.coAssertExecutesInLessThan
 import coroutines.coAssertExecutionTakesAtLeast
-import coroutines.log
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -11,7 +10,6 @@ import kotlinx.coroutines.test.DelayController
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
@@ -21,7 +19,7 @@ import kotlin.time.seconds
  * a [virtual time][DelayController.currentTime], which may be controlled using functions like e.g.
  * [advanceTimeBy][DelayController.advanceTimeBy] or [advanceUntilIdle][DelayController.advanceUntilIdle].
  */
-@UseExperimental(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class AdvanceTime {
 
     @Test
