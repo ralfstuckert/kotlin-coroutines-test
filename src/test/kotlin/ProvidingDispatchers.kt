@@ -12,7 +12,6 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
@@ -47,7 +46,6 @@ suspend fun loadUserWithIO(backend: UserService): User =
  * > In future releases it might be possible to test code directly using [Dispatchers.IO] etc,
  * > see issue [1365](https://github.com/Kotlin/kotlinx.coroutines/issues/1365).
  */
-@ExperimentalCoroutinesApi
 class ProvidingDispatchers {
 
     private val backend: UserService = mockk()

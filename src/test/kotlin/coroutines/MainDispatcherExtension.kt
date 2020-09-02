@@ -1,7 +1,6 @@
 package coroutines
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.extension.*
  * as the [Main dispatcher][Dispatchers.setMain] and resets it after the test.
  * The dispatcher can be resolved as a [parameter][ParameterResolver] in the test.
  */
-@ExperimentalCoroutinesApi
 class MainDispatcherExtension : ParameterResolver, BeforeEachCallback, AfterEachCallback {
 
     override fun supportsParameter(
@@ -40,14 +38,12 @@ class MainDispatcherExtension : ParameterResolver, BeforeEachCallback, AfterEach
 
 private const val DISPATCHER = "TestCoroutineDispatcher"
 
-@ExperimentalCoroutinesApi
 private var ExtensionContext.testDispatcher: TestCoroutineDispatcher?
     get() = store[DISPATCHER] as? TestCoroutineDispatcher
     set(value) {
         store.put(DISPATCHER, value)
     }
 
-@ExperimentalCoroutinesApi
 private val ExtensionContext.store
     get() =
         this.getStore(

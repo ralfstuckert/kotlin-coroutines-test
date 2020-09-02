@@ -4,7 +4,6 @@ import coroutines.MainDispatcherExtension
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith
  * JUnit 5 extension providing and maintaining a test main dispatcher for you.
  */
 @ExtendWith(MainDispatcherExtension::class)
-@ExperimentalCoroutinesApi
 class MainDispatcherUsingExtension {
 
     private val uiMock: UI = mockk()

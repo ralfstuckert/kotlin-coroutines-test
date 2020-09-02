@@ -1,13 +1,11 @@
 package coroutines
 
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UncaughtExceptionCaptor
 import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.CoroutineContext
 
 
-@ExperimentalCoroutinesApi
 class SilentTestCoroutineExceptionHandler() : AbstractCoroutineContextElement(CoroutineExceptionHandler),
     CoroutineExceptionHandler, UncaughtExceptionCaptor {
 

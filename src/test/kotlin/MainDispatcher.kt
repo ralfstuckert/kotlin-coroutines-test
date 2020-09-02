@@ -8,7 +8,6 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -34,7 +33,6 @@ suspend fun confirmDone(ui: UI): Confirmation =
  * may use this function with either a dedicated dispatcher or the one provided by
  * [runBlockingTest].
  */
-@ExperimentalCoroutinesApi
 class MainDispatcher {
 
     private val uiMock: UI = mockk()

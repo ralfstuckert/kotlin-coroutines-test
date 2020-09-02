@@ -1,3 +1,4 @@
+import coroutines.AtomicBoolean
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -13,7 +14,7 @@ class EagerExecution {
 
     @Test
     fun `no eager excecution in runBlocking`() = runBlocking {
-        var called = false
+        var called by AtomicBoolean(false)
         val job = launch {
             called = true
         }
@@ -24,7 +25,7 @@ class EagerExecution {
 
     @Test
     fun `use scope to wait for coroutine`() = runBlocking {
-        var called = false
+        var called by AtomicBoolean(false)
         coroutineScope {
             val job = launch {
                 called = true
@@ -36,7 +37,7 @@ class EagerExecution {
 
     @Test
     fun `eager excecution in runBlocking`() = runBlocking {
-        var called = false
+        var called by AtomicBoolean(false)
         val job = launch(start = CoroutineStart.UNDISPATCHED) {
             called = true
         }
@@ -46,7 +47,7 @@ class EagerExecution {
 
     @Test
     fun `eager excecution in runBlockingTest`() = runBlockingTest {
-        var called = false
+        var called by AtomicBoolean(false)
         launch {
             called = true
         }
@@ -56,7 +57,7 @@ class EagerExecution {
 
     @Test
     fun `eager execution until delay or yield`() = runBlockingTest {
-        var called = false
+        var called by AtomicBoolean(false)
         launch {
             yield()
             called = true
@@ -70,7 +71,7 @@ class EagerExecution {
 
     @Test
     fun `no eager excecution on lazy start`() = runBlockingTest {
-        var called = false
+        var called by AtomicBoolean(false)
         val job = launch(start = CoroutineStart.LAZY) {
             called = true
         }

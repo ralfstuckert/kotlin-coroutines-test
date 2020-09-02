@@ -2,7 +2,6 @@ package api
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
-import org.slf4j.LoggerFactory
 
 
 class FakeUserServiceCompletableDeferred(val user: User) : UserService {

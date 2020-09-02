@@ -31,8 +31,8 @@ dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter:5.6.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-    testImplementation "io.mockk:mockk:1.9"
-    testImplementation "com.natpryce:hamkrest:1.7.0.0"
+    testImplementation "io.mockk:mockk:1.10.0"
+    testImplementation "com.natpryce:hamkrest:1.7.0.3"
     testImplementation "com.rickbusarow.dispatcherprovider:dispatcher-provider-test:1.0.0-beta02"
 }
 
@@ -51,7 +51,11 @@ tasks.withType(Test) {
 
 compileTestKotlin {
     kotlinOptions {
-        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn",
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xopt-in=kotlin.time.ExperimentalTime"
+        ]
     }
 }
 

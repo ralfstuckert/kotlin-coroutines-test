@@ -1,8 +1,8 @@
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.greaterThanOrEqualTo
+import coroutines.AtomicBoolean
 import coroutines.coAssertExecutesInLessThan
 import coroutines.coAssertExecutionTakesAtLeast
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -11,7 +11,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 
 /**
@@ -19,7 +18,6 @@ import kotlin.time.seconds
  * a [virtual time][DelayController.currentTime], which may be controlled using functions like e.g.
  * [advanceTimeBy][DelayController.advanceTimeBy] or [advanceUntilIdle][DelayController.advanceUntilIdle].
  */
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
 class AdvanceTime {
 
     @Test
@@ -42,7 +40,7 @@ class AdvanceTime {
 
     @Test
     fun `does not auto-advance time in launched coroutine`() = runBlockingTest {
-        var called = false
+        var called by AtomicBoolean(false)
         launch {
             delay(1000)
             called = true
@@ -56,7 +54,7 @@ class AdvanceTime {
 
     @Test
     fun `advance time is reliable`() = runBlockingTest {
-        var called = false
+        var called by AtomicBoolean(false)
         launch {
             delay(1000)
             called = true
