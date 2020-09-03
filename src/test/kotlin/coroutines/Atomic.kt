@@ -13,3 +13,13 @@ fun AtomicBoolean(initial: Boolean = false) = object: ReadWriteProperty<Any?, Bo
     }
 }
 
+fun AtomicInt(initial: Int = 0) = object: ReadWriteProperty<Any?, Int> {
+    private val internal = java.util.concurrent.atomic.AtomicInteger(initial)
+
+    override operator fun getValue(thisRef: Any?, property: KProperty<*>): Int = internal.get()
+
+    override operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) {
+        internal.set(value)
+    }
+}
+
