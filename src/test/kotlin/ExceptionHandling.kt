@@ -17,7 +17,6 @@ import java.io.IOException
  * a [TestCoroutineExceptionHandler] which allows you to analyze and test exceptional
  * situations.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class ExceptionHandling {
 
     @Test

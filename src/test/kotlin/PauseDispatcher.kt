@@ -1,5 +1,4 @@
 import coroutines.AtomicInt
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.DelayController
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test
  * also provides for pausing and resuming the dispatcher. Effectively this switches
  * the eager execution into a lazy one under your control.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class PauseDispatcher {
 
     @Test

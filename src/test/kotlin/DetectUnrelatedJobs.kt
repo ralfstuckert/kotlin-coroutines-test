@@ -10,7 +10,6 @@ import org.junit.jupiter.api.assertThrows
  * the test block, and raises an exception in case of a mismatch. The
  * problem is usually based in an unintential use of a non-test dispatcher.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class DetectUnrelatedJobs {
 
     /**

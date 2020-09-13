@@ -23,7 +23,6 @@ suspend fun loadUser(backend: UserService): User =
  * Due to the time control provided by the [TestCoroutineDispatcher]
  * it is quite easy to test timeouts by checking for [TimeoutCancellationException].
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class TestingTimeoutInSuspendableFunction {
 
     private val user = User("Herbert")

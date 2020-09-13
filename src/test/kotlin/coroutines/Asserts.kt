@@ -15,7 +15,6 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource.Monotonic
 
-@OptIn(ExperimentalContracts::class)
 suspend inline fun <reified T : Throwable> coAssertThrows(crossinline block: suspend CoroutineScope.() -> Unit): T {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
@@ -37,7 +36,6 @@ suspend inline fun <reified T : Throwable> coAssertThrows(crossinline block: sus
     }
 }
 
-@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
 suspend inline fun coAssertExecutesInLessThan(
     expectedDuration: Duration,
     crossinline block: suspend CoroutineScope.() -> Unit
@@ -50,7 +48,6 @@ suspend inline fun coAssertExecutesInLessThan(
 }
 
 
-@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
 suspend inline fun coAssertExecutionTakesAtLeast(
     expectedDuration: Duration,
     crossinline block: suspend CoroutineScope.() -> Unit
@@ -65,7 +62,6 @@ suspend inline fun coAssertExecutionTakesAtLeast(
     ) { "execution took less than the expected $expectedDuration" }
 }
 
-@OptIn(ExperimentalContracts::class, ExperimentalTime::class)
 suspend inline fun coMeasureTime(crossinline block: suspend CoroutineScope.() -> Unit): Duration {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
  * [runBlockingTest] actually executes launched coroutines eagerly,
  * which is effectively like starting it in mode [CoroutineStart.UNDISPATCHED].
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class EagerExecution {
 
     @Test

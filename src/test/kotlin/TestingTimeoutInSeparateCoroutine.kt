@@ -30,7 +30,6 @@ fun CoroutineScope.loadUserLaunch(backend: UserService):Job = launch {
  * Testing timeout in new coroutines is quites similar to
  * testing in [suspendable functions][TestingTimeoutInSuspendableFunction]
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class TestingTimeoutInSeparateCoroutine {
 
     private val backend: UserService = mockk()
