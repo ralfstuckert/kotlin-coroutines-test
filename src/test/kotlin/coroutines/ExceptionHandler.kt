@@ -7,16 +7,18 @@ import kotlin.coroutines.CoroutineContext
 
 
 class SilentTestCoroutineExceptionHandler() : AbstractCoroutineContextElement(CoroutineExceptionHandler),
-    CoroutineExceptionHandler, UncaughtExceptionCaptor {
+        CoroutineExceptionHandler, UncaughtExceptionCaptor {
 
-    private var _uncaughtExceptions: List<Throwable> = emptyList()
+    private val _exceptions = mutableListOf<Throwable>()
 
     override fun handleException(context: CoroutineContext, exception: Throwable) {
-        _uncaughtExceptions = _uncaughtExceptions + exception
+        synchronized(_exceptions) {
+            _exceptions += exception
+        }
     }
 
     override val uncaughtExceptions: List<Throwable>
-        get() = _uncaughtExceptions
+        get() = synchronized(_exceptions) { _exceptions.toList() }
 
     override fun cleanupTestCoroutines() {
         // do not rethrow caught exceptions
