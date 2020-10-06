@@ -1,6 +1,7 @@
 import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.isA
+import coroutines.DummyCoroutineExceptionHandler
 import coroutines.SilentTestCoroutineExceptionHandler
 import coroutines.testExceptionHandler
 import kotlinx.coroutines.*
@@ -108,17 +109,30 @@ class ExceptionHandling {
     }
 
     @Test
-    fun `use a custom exception handler in runBlockingTest() for testing supervisor behaviour`() =
-        runBlockingTest(SilentTestCoroutineExceptionHandler()) {
-            supervisorScope() {
-                val child = launch() {
-                    throw IOException()
+    fun `pass a dummy exception handler using withContext() for testing supervisor behaviour`() =
+            runBlockingTest {
+                // 'replace' TestCoroutineExceptionHandler with DummyCoroutineExceptionHandler
+                withContext(DummyCoroutineExceptionHandler) {
+                    supervisorScope() {
+                        val child = launch() {
+                            throw IOException()
+                        }
+                    }
                 }
             }
-            // custom exception handler does not propagate (throw) exception as expected
-            // in supervisor scope, but we still can examine it in the test
-            assertThat(uncaughtExceptions, anyElement(isA<IOException>()))
-        }
+
+    @Test
+    fun `use a custom test exception handler in runBlockingTest() for testing supervisor behaviour`() =
+            runBlockingTest(SilentTestCoroutineExceptionHandler()) {
+                supervisorScope() {
+                    val child = launch() {
+                        throw IOException()
+                    }
+                }
+                // custom exception handler does not propagate (throw) exception as expected
+                // in supervisor scope, but we still can examine it in the test
+                assertThat(uncaughtExceptions, anyElement(isA<IOException>()))
+            }
 
 
 }

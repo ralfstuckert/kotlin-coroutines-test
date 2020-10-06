@@ -24,3 +24,9 @@ class SilentTestCoroutineExceptionHandler() : AbstractCoroutineContextElement(Co
         // do not rethrow caught exceptions
     }
 }
+
+
+val DummyCoroutineExceptionHandler =
+        CoroutineExceptionHandler { context,throwable ->
+            throwable.printStackTrace()
+        }
